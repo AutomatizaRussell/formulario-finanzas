@@ -8,7 +8,7 @@ const fs = require('fs');
 const app = express();
 const port = process.env.PORT || 3000;
 
-const N8N_WEBHOOK_URL = 'https://n8n.rbgct.cloud/webhook-test/4bd559a1-cf8b-416b-ae2c-764f1adcd55f';
+const N8N_WEBHOOK_URL = 'https://n8n.rbgct.cloud/webhook/tablero-evolv';
 
 app.use(cors());
 const upload = multer({ dest: 'uploads/', limits: { fileSize: 20 * 1024 * 1024 } });
