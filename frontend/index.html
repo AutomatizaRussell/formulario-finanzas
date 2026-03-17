@@ -372,26 +372,31 @@
             status.classList.remove('hidden');
 
             try {
-                // Aquí usamos la URL real de tu webhook de n8n
-                const res = await fetch('https://n8n.rbgct.cloud/webhook/tablero-evolv', { 
+                const res = await fetch('/api/enviar-formulario', { 
                     method: 'POST', 
                     body: new FormData(this) 
                 });
                 
+                // Extraemos el texto crudo del error para ver quién es el culpable real
+                const responseData = await res.text(); 
+                
                 if (res.ok) {
                     status.className = "mt-6 p-4 rounded-lg text-center font-bold text-sm bg-green-100 text-green-800";
-                    status.innerHTML = "✓ REPORTE ENVIADO EXITOSAMENTE A N8N";
+                    status.innerHTML = "✓ REPORTE RECIBIDO EXITOSAMENTE";
                     btn.innerHTML = "ENVÍO COMPLETADO";
                     this.reset();
+                    document.getElementById('fileName').textContent = 'No seleccionado';
                 } else { 
-                    throw new Error('El servidor respondió con error'); 
+                    // Disparamos el error exacto que nos devuelva el servidor
+                    throw new Error(`Código ${res.status}: ${responseData}`); 
                 }
             } catch (error) {
-                status.className = "mt-6 p-4 rounded-lg text-center font-bold text-sm bg-red-100 text-red-800";
-                status.innerHTML = "✗ ERROR DE CONEXIÓN. Revisa la consola y que el webhook esté activo.";
+                // Mostramos el texto del error en pantalla
+                status.className = "mt-6 p-4 rounded-lg text-left font-bold text-xs bg-red-100 text-red-800 break-words";
+                status.innerHTML = "✗ " + error.message;
                 btn.disabled = false;
                 btn.innerHTML = "REINTENTAR ENVÍO";
-                console.error("Detalle del error:", error);
+                console.error("Detalle crudo:", error);
             }
         });
     </script>
