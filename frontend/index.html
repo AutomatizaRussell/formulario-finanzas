@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="https://www.russellbedford.com.co/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="https://www.russellbedford.com.co/favicon.ico">
+    <title>Declaración de Precios de Transferencia - Russell Bedford GCT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap");
+
+        :root {
+            --primary: #001871;
+            --primary-hover: #00a9ce;
+            --accent-turquoise: #00bfb3;
+            --bg-card: #f8fafc;
+            --text-dark: #1e293b;
+            --border-color: #dce3e8;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #ffffff;
+            color: var(--text-dark);
+        }
+
+        .card-container {
+            background-color: var(--bg-card);
+            border-radius: 12px;
+            box-shadow: 0 20px 30px -5px rgba(0, 24, 113, 0.15);
+            max-width: 850px;
+            margin: 40px auto;
+            overflow: hidden;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .container-padding {
+            padding: 40px 50px;
+        }
+
+        .header-title {
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 26px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .form-section {
+            margin-bottom: 45px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: var(--text-dark);
+        }
+
+        .section-title::before {
+            content: "";
+            width: 4px;
+            height: 22px;
+            background: var(--accent-turquoise);
+            border-radius: 2px;
+        }
+
+        .subsection-label {
+            font-size: 13px;
+            color: var(--primary);
+            font-weight: 700;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--accent-turquoise);
+            padding-bottom: 6px;
+            margin-bottom: 20px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .input-field {
+            width: 100%;
+            height: 48px;
+            padding: 0 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            outline: none;
+            background: white;
+        }
+
+        .input-field:focus {
+            border-color: var(--primary-hover);
+            box-shadow: 0 0 0 3px rgba(0, 169, 206, 0.1);
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, var(--primary) 0%, #0a2b5f 100%);
+            color: white;
+            padding: 18px;
+            border-radius: 8px;
+            font-weight: 700;
+            width: 100%;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(0, 24, 113, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 169, 206, 0.4);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container-padding {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <form id="profForm" class="card-container">
+        <img src="https://raw.githubusercontent.com/AutomatizaRussell/Resourse_GestionHumana/main/Logo_RB2021.png"
+            class="w-full" alt="Header">
+        <img src="https://raw.githubusercontent.com/AutomatizaRussell/Resourse_GestionHumana/main/BARRA_RUSSELL.png"
+            class="w-full">
+
+        <div class="container-padding">
+            <div class="mb-10 text-center">
+                <h1 class="header-title">Precios de Transferencia</h1>
+                <p class="text-slate-500 text-xs font-medium uppercase tracking-widest">Periodo Fiscal 2026</p>
+            </div>
+
+            <div class="form-section">
+                <div class="subsection-label">Datos de la Entidad Informante</div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div class="text-center">
+                        <label>NIT DE LA RAZON SOCIAL<span class="text-orange-500">*</span></label>
+                        <input type="text" name="nit_razon_social" class="input-field text-center"
+                            placeholder="NIT sin número de verificación"
+                            oninput="this.value = this.value.toUpperCase()" required>
+                    </div>
+                    
+                    <div class="text-center">
+                        <label>SECTOR AL QUE PERTENECE <span class="text-orange-500">*</span></label>
+                        <select name="sector" class="input-field" required>
+                            <option value="" disabled selected>SELECCIONE UNA OPCIÓN</option>
+                            <option value="EDUCACION">Educación</option>
+                            <option value="SERVICIOS_FINANCIEROS_SEGUROS">Servicios financieros y de seguros</option>
+                            <option value="CONSTRUCCION_INMOBILIARIA">Construcción e inmobiliaria</option>
+                            <option value="OTROS_SERVICIOS">Otros servicios</option>
+                            <option value="ENERGIA_PETROLEO_GAS">Energía, petróleo y gas</option>
+                            <option value="SECTOR_FARMACEUTICO">Sector Farmacéutico</option>
+                            <option value="ENTIDADES_SIN_ANIMO_LUCRO">Entidades sin ánimo de lucro</option>
+                            <option value="SECTOR_TIC">Sector TIC</option>
+                            <option value="OTROS_SECTORES_ESPECIFICOS">Otros sectores específicos</option>
+                            <option value="MANUFACTURA">Manufactura</option>
+                            <option value="SECTOR_ALIMENTOS">Sector alimentos</option>
+                            <option value="SECTOR_HOTELERIA">Sector hotelería</option>
+                            <option value="SECTOR_COMERCIALIZACION">Sector comercialización</option>
+                            <option value="SECTOR_TRANSPORTE">Sector Transporte</option>
+                            <option value="SALUD">Salud</option>
+                        </select>
+                    </div>
+                    
+                    <div class="text-center md:col-span-2">
+                        <label>CANTIDAD DE EMPLEADOS <span class="text-orange-500">*</span></label>
+                        <input type="number" name="cantidad_empleados" class="input-field text-center"
+                            placeholder="Total de empleados" min="0" required>
+                    </div>
+                </div>
+
+                <div class="subsection-label mt-8">Cifras Financieras</div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="text-center">
+                        <label>TOTAL ACTIVOS <span class="text-orange-500">*</span></label>
+                        <input type="number" name="total_activos" class="input-field text-center" placeholder="$ 0" required>
+                    </div>
+                    <div class="text-center">
+                        <label>TOTAL PASIVO <span class="text-orange-500">*</span></label>
+                        <input type="number" name="total_pasivo" class="input-field text-center" placeholder="$ 0" required>
+                    </div>
+                    <div class="text-center">
+                        <label>TOTAL PATRIMONIO <span class="text-orange-500">*</span></label>
+                        <input type="number" name="total_patrimonio" class="input-field text-center" placeholder="$ 0" required>
+                    </div>
+                    <div class="text-center">
+                        <label>TOTAL INGRESO <span class="text-orange-500">*</span></label>
+                        <input type="number" name="total_ingreso" class="input-field text-center" placeholder="$ 0" required>
+                    </div>
+                    <div class="text-center">
+                        <label>TOTAL GASTO <span class="text-orange-500">*</span></label>
+                        <input type="number" name="total_gasto" class="input-field text-center" placeholder="$ 0" required>
+                    </div>
+                    <div class="text-center">
+                        <label>TOTAL COSTO <span class="text-orange-500">*</span></label>
+                        <input type="number" name="total_costo" class="input-field text-center" placeholder="$ 0" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-title">1. Ubicación de Entidades Vinculadas</div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+                    <div class="text-center">
+                        <label>¿Posee vinculados en Zona Franca? *</label>
+                        <select name="vinc_zona_franca" class="input-field" required>
+                            <option value="" disabled selected>SELECCIONE UNA OPCION</option>
+                            <option value="NO">NO</option>
+                            <option value="SI">SI</option>
+                        </select>
+                    </div>
+                    <div class="text-center">
+                        <label>¿Posee vinculados en el exterior? *</label>
+                        <select name="vinc_exterior" class="input-field" required>
+                            <option value="" disabled selected>SELECCIONE UNA OPCION</option>
+                            <option value="NO">NO</option>
+                            <option value="SI">SI</option>
+                        </select>
+                    </div>
+                    <div class="text-center">
+                        <label>SENIOR A CARGO *</label>
+                        <select name="senior_cargo" class="input-field" required>
+                            <option value="" disabled selected>SELECCIONE UNA OPCION</option>
+                            <option value="ALEJANDRA_CORREA_QUINTERO">ALEJANDRA CORREA QUINTERO</option>
+                            <option value="DAHIANA_GONZALEZ_RONDON">DAHIANA GONZALEZ RONDÓN</option>
+                            <option value="DARLY_YADISA_ECHEVERRI_PATINO">DARLY YADISA ECHEVERRI PATIÑO</option>
+                            <option value="DARWIN_GUZMAN_MENA">DARWIN GUZMAN MENA</option>
+                            <option value="ESTEBAN_ORTIZ_LONDONO">ESTEBAN ORTIZ LONDOÑO</option>
+                            <option value="FERMIN_ALEJANDRO_YEPES">FERMIN ALEJANDRO YEPES</option>
+                            <option value="JOSE_FELIPE_LOPEZ_MENDEZ">JOSÉ FELIPE LÓPEZ MÉNDEZ</option>
+                            <option value="JUAN_SEBASTIAN_SANCHEZ_BLANDON">JUAN SEBASTIAN SANCHEZ BLANDON</option>
+                            <option value="LEDYS_JOHANA_PALACIOS_MOYA">LEDYS JOHANA PALACIOS MOYA</option>
+                            <option value="LUISA_FERNANDA_PICO_REYES">LUISA FERNANDA PICO REYES</option>
+                            <option value="LUZ_DANEY_HERNANDEZ_SEPULVEDA">LUZ DANEY HERNANDEZ SEPULVEDA</option>
+                            <option value="MANUELA_GUTIERREZ_OSSA">MANUELA GUTIERREZ OSSA</option>
+                            <option value="MARIA_ALEXANDRA_CALLE_HENAO">MARIA ALEXANDRA CALLE HENAO</option>
+                            <option value="RAUL_BERNARDO_ACOSTA_ZAPATA">RAÚL BERNARDO ACOSTA ZAPATA</option>
+                            <option value="SANDRA_LILIANA_VALLE_VALLE">SANDRA LILIANA VALLE VALLE</option>
+                            <option value="SANDRA_PATRICA_MENDOZA_RINCON">SANDRA PATRICA MENDOZA RINCÓN</option>
+                            <option value="SEBASTIAN_VALENCIA_BUSTAMANTE">SEBASTIAN VALENCIA BUSTAMANTE</option>
+                            <option value="VALENTINA_RODRIGUEZ_RAMIREZ">VALENTINA RODRÍGUEZ RAMÍREZ</option>
+                            <option value="WILMAR_TUBERQUIA_AVENDANO">WILMAR TUBERQUIA AVENDAÑO</option>
+                            <option value="SINDY_KATERINE_ECHEVERRI_RAMIREZ">SINDY KATERINE ECHEVERRI RAMIREZ</option>
+                            <option value="JOSE_DANIEL_PUENTE_RODRIGUEZ">JOSE DANIEL PUENTE RODRIGUEZ</option>
+                            <option value="ESTEBAN_ARBOLEDA_MORALES">ESTEBAN ARBOLEDA MORALES</option>
+                            <option value="SARA_VIVIANA_PARRA_BENITEZ">SARA VIVIANA PARRA BENITEZ</option>
+                            <option value="WILBER_ENRIQUE_PEREZ_TORRES">WILBER ENRIQUE PEREZ TORRES</option>
+                            <option value="SUSANA_DEL_MAR_RUIZ_GUALY">SUSANA DEL MAR RUIZ GUALY</option>
+                            <option value="JUAN_FELIPE_ZULUAGA_MEJIA">JUAN FELIPE ZULUAGA MEJIA</option>
+                            <option value="LUIS_MIGUEL_CARDONA_RAMIREZ">LUIS MIGUEL CARDONA RAMIREZ</option>
+                            <option value="BRAHIAN_LOAIZA_HERNANDEZ">BRAHIAN LOAIZA HERNANDEZ</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <label>Razón Social de los Vinculados <span class="text-orange-500">*</span></label>
+                    <input type="text" name="razon_social_vinculados" class="input-field text-center"
+                        placeholder="Indique los nombres o razones sociales"
+                        oninput="this.value = this.value.toUpperCase()" required>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-title">2. Naturaleza de las Operaciones</div>
+                <div class="space-y-6">
+                    <div class="text-center">
+                        <label>EGRESO-INGRESO-PRESTAMOS<span
+                                class="text-orange-500">*</span></label>
+                        <input type="text" name="detalle_servicios" class="input-field text-center"
+                            placeholder="Describa la operación realizada"
+                            oninput="this.value = this.value.toUpperCase()" required>
+                    </div>
+                    <div class="text-center">
+                        <label>Saldos o movimientos de préstamos vigentes con Vinculados (2025) <span
+                                class="text-orange-500">*</span></label>
+                        <input type="text" name="detalle_prestamos" class="input-field text-center"
+                            placeholder="Indique condiciones o saldos pendientes"
+                            oninput="this.value = this.value.toUpperCase()" required>
+                    </div>
+                    <div class="text-center">
+                        <label>Operaciones en jurisdicciones no cooperantes o de baja imposición <span
+                                class="text-orange-500">*</span></label>
+                        <input type="text" name="paises_no_cooperantes" class="input-field text-center"
+                            placeholder="Especifique jurisdicción y tipo de operación"
+                            oninput="this.value = this.value.toUpperCase()" required>
+                    </div>
+                    <div class="text-center">
+                        <label>correo encargado <span class="text-orange-500">*</span></label>
+                        <input type="email" name="correo_encargado" class="input-field text-center"
+                            placeholder="Especifique el correo del encargado" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section bg-slate-100 p-8 rounded-xl border border-dashed border-slate-300">
+                <div class="section-title">3. Certificaciones Contables</div>
+                <div class="text-center">
+                    <label>Balance de prueba (Nivel Terceros) y Estados Financieros 2025 *</label>
+                    <div
+                        class="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4 mt-4">
+                        <label for="soporte_financiero"
+                            class="cursor-pointer inline-flex items-center px-6 py-3 bg-gradient-to-r from-[var(--primary)] to-[#0a2b5f] text-white font-semibold rounded-lg shadow-md focus:outline-none transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 16v1a1 1 0 001 1h14a1 1 0 001-1v-1M4 12l4-4m0 0l4 4m-4-4v12" />
+                            </svg>
+                            Seleccionar archivo
+                        </label>
+                        <input id="soporte_financiero" type="file" name="soporte_financiero" class="hidden"
+                            accept=".xlsx" required
+                            onchange="document.getElementById('fileName').textContent = this.files[0]?.name || 'No seleccionado';">
+                        <span id="fileName" class="text-sm text-slate-500">No seleccionado</span>
+                    </div>
+                    <p class="text-[10px] text-slate-400 mt-2 italic">Formatos admitidos: .xlsx. Capacidad máxima: 20MB.
+                    </p>
+                </div>
+            </div>
+
+            <button type="submit" id="btn" class="btn-submit">Finalizar y Enviar Reporte</button>
+            <div id="status" class="hidden mt-6 p-4 rounded-lg text-center font-bold text-sm"></div>
+        </div>
+        <img src="https://github.com/AutomatizaRussell/Resourse_GestionHumana/blob/main/FOOTER.jpg?raw=true"
+            class="w-full">
+    </form>
+
+    <script>
+        document.getElementById('profForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn');
+            const status = document.getElementById('status');
+
+            btn.disabled = true;
+            btn.innerHTML = "PROCESANDO ENVÍO... ⏳";
+            status.className = "mt-6 p-4 rounded-lg text-center font-bold text-sm bg-blue-50 text-blue-800";
+            status.innerHTML = "Transmitiendo información a los servidores...";
+            status.classList.remove('hidden');
+
+            try {
+                // Aquí usamos la URL real de tu webhook de n8n
+                const res = await fetch('https://n8n.rbgct.cloud/webhook/tablero-evolv', { 
+                    method: 'POST', 
+                    body: new FormData(this) 
+                });
+                
+                if (res.ok) {
+                    status.className = "mt-6 p-4 rounded-lg text-center font-bold text-sm bg-green-100 text-green-800";
+                    status.innerHTML = "✓ REPORTE ENVIADO EXITOSAMENTE A N8N";
+                    btn.innerHTML = "ENVÍO COMPLETADO";
+                    this.reset();
+                } else { 
+                    throw new Error('El servidor respondió con error'); 
+                }
+            } catch (error) {
+                status.className = "mt-6 p-4 rounded-lg text-center font-bold text-sm bg-red-100 text-red-800";
+                status.innerHTML = "✗ ERROR DE CONEXIÓN. Revisa la consola y que el webhook esté activo.";
+                btn.disabled = false;
+                btn.innerHTML = "REINTENTAR ENVÍO";
+                console.error("Detalle del error:", error);
+            }
+        });
+    </script>
+</body>
+
+</html>
