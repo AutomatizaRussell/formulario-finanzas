@@ -166,15 +166,15 @@
 
             <div class="form-section">
                 <div class="subsection-label">Datos de la Entidad Informante</div>
-                
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div class="text-center">
                         <label>NIT DE LA RAZON SOCIAL<span class="text-orange-500">*</span></label>
                         <input type="text" name="nit_razon_social" class="input-field text-center"
-                            placeholder="NIT sin número de verificación"
-                            oninput="this.value = this.value.toUpperCase()" required>
+                            placeholder="NIT sin número de verificación" inputmode="numeric"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
                     </div>
-                    
+
                     <div class="text-center">
                         <label>SECTOR AL QUE PERTENECE <span class="text-orange-500">*</span></label>
                         <select name="sector" class="input-field" required>
@@ -196,11 +196,12 @@
                             <option value="SALUD">Salud</option>
                         </select>
                     </div>
-                    
+
                     <div class="text-center md:col-span-2">
                         <label>CANTIDAD DE EMPLEADOS <span class="text-orange-500">*</span></label>
-                        <input type="number" name="cantidad_empleados" class="input-field text-center"
-                            placeholder="Total de empleados" min="0" required>
+                        <input type="text" name="cantidad_empleados" class="input-field text-center"
+                            placeholder="Total de empleados" inputmode="numeric"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
                     </div>
                 </div>
 
@@ -208,27 +209,33 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="text-center">
                         <label>TOTAL ACTIVOS <span class="text-orange-500">*</span></label>
-                        <input type="number" name="total_activos" class="input-field text-center" placeholder="$ 0" required>
+                        <input type="text" name="total_activos" class="input-field text-center" placeholder="$ 0"
+                            inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
                     </div>
                     <div class="text-center">
                         <label>TOTAL PASIVO <span class="text-orange-500">*</span></label>
-                        <input type="number" name="total_pasivo" class="input-field text-center" placeholder="$ 0" required>
+                        <input type="text" name="total_pasivo" class="input-field text-center" placeholder="$ 0"
+                            inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
                     </div>
                     <div class="text-center">
                         <label>TOTAL PATRIMONIO <span class="text-orange-500">*</span></label>
-                        <input type="number" name="total_patrimonio" class="input-field text-center" placeholder="$ 0" required>
+                        <input type="text" name="total_patrimonio" class="input-field text-center" placeholder="$ 0"
+                            inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
                     </div>
                     <div class="text-center">
                         <label>TOTAL INGRESO <span class="text-orange-500">*</span></label>
-                        <input type="number" name="total_ingreso" class="input-field text-center" placeholder="$ 0" required>
+                        <input type="text" name="total_ingreso" class="input-field text-center" placeholder="$ 0"
+                            inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
                     </div>
                     <div class="text-center">
                         <label>TOTAL GASTO <span class="text-orange-500">*</span></label>
-                        <input type="number" name="total_gasto" class="input-field text-center" placeholder="$ 0" required>
+                        <input type="text" name="total_gasto" class="input-field text-center" placeholder="$ 0"
+                            inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
                     </div>
                     <div class="text-center">
                         <label>TOTAL COSTO <span class="text-orange-500">*</span></label>
-                        <input type="number" name="total_costo" class="input-field text-center" placeholder="$ 0" required>
+                        <input type="text" name="total_costo" class="input-field text-center" placeholder="$ 0"
+                            inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
                     </div>
                 </div>
             </div>
@@ -278,7 +285,7 @@
                             <option value="SINDY_KATERINE_ECHEVERRI_RAMIREZ">SINDY KATERINE ECHEVERRI RAMIREZ</option>
                             <option value="JOSE_DANIEL_PUENTE_RODRIGUEZ">JOSE DANIEL PUENTE RODRIGUEZ</option>
                             <option value="ESTEBAN_ARBOLEDA_MORALES">ESTEBAN ARBOLEDA MORALES</option>
-                            <option value="SARA_VIVIANA_PARRA_BENITEZ">SARA VIVIANA PARRA BENITEZ</option>
+                            <option value="SARA_VIVIANA_PARRA_BENITEZ">SARA VIVIANA PARA BENITEZ</option>
                             <option value="WILBER_ENRIQUE_PEREZ_TORRES">WILBER ENRIQUE PEREZ TORRES</option>
                             <option value="SUSANA_DEL_MAR_RUIZ_GUALY">SUSANA DEL MAR RUIZ GUALY</option>
                             <option value="JUAN_FELIPE_ZULUAGA_MEJIA">JUAN FELIPE ZULUAGA MEJIA</option>
@@ -299,8 +306,7 @@
                 <div class="section-title">2. Naturaleza de las Operaciones</div>
                 <div class="space-y-6">
                     <div class="text-center">
-                        <label>EGRESO-INGRESO-PRESTAMOS<span
-                                class="text-orange-500">*</span></label>
+                        <label>EGRESO-INGRESO-PRESTAMOS<span class="text-orange-500">*</span></label>
                         <input type="text" name="detalle_servicios" class="input-field text-center"
                             placeholder="Describa la operación realizada"
                             oninput="this.value = this.value.toUpperCase()" required>
@@ -340,12 +346,11 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M4 16v1a1 1 0 001 1h14a1 1 0 001-1v-1M4 12l4-4m0 0l4 4m-4-4v12" />
                             </svg>
-                            Seleccionar archivo
+                            Seleccionar archivos
                         </label>
                         <input id="soporte_financiero" type="file" name="soporte_financiero" class="hidden"
-                            accept=".xlsx" required
-                            onchange="document.getElementById('fileName').textContent = this.files[0]?.name || 'No seleccionado';">
-                        <span id="fileName" class="text-sm text-slate-500">No seleccionado</span>
+                            accept=".xlsx" multiple required onchange="mostrarNombresArchivos(this)">
+                        <span id="fileName" class="text-sm text-slate-500 block mt-2">No seleccionado</span>
                     </div>
                     <p class="text-[10px] text-slate-400 mt-2 italic">Formatos admitidos: .xlsx. Capacidad máxima: 20MB.
                     </p>
@@ -360,6 +365,20 @@
     </form>
 
     <script>
+        // ESTA FUNCIÓN DEBE ESTAR AFUERA PARA SER GLOBAL
+        function mostrarNombresArchivos(input) {
+            const fileNameDisplay = document.getElementById('fileName');
+            if (input.files && input.files.length > 0) {
+                if (input.files.length === 1) {
+                    fileNameDisplay.textContent = input.files[0].name;
+                } else {
+                    fileNameDisplay.textContent = `${input.files.length} archivos seleccionados`;
+                }
+            } else {
+                fileNameDisplay.textContent = 'No seleccionado';
+            }
+        }
+
         document.getElementById('profForm').addEventListener('submit', async function (e) {
             e.preventDefault();
             const btn = document.getElementById('btn');
@@ -372,26 +391,23 @@
             status.classList.remove('hidden');
 
             try {
-                const res = await fetch('/api/enviar-formulario', { 
-                    method: 'POST', 
-                    body: new FormData(this) 
+                const res = await fetch('/api/enviar-formulario', {
+                    method: 'POST',
+                    body: new FormData(this)
                 });
-                
-                // Extraemos el texto crudo del error para ver quién es el culpable real
-                const responseData = await res.text(); 
-                
+
+                const responseData = await res.text();
+
                 if (res.ok) {
                     status.className = "mt-6 p-4 rounded-lg text-center font-bold text-sm bg-green-100 text-green-800";
                     status.innerHTML = "✓ REPORTE RECIBIDO EXITOSAMENTE";
                     btn.innerHTML = "ENVÍO COMPLETADO";
                     this.reset();
                     document.getElementById('fileName').textContent = 'No seleccionado';
-                } else { 
-                    // Disparamos el error exacto que nos devuelva el servidor
-                    throw new Error(`Código ${res.status}: ${responseData}`); 
+                } else {
+                    throw new Error(`Código ${res.status}: ${responseData}`);
                 }
             } catch (error) {
-                // Mostramos el texto del error en pantalla
                 status.className = "mt-6 p-4 rounded-lg text-left font-bold text-xs bg-red-100 text-red-800 break-words";
                 status.innerHTML = "✗ " + error.message;
                 btn.disabled = false;
