@@ -1,0 +1,67 @@
+/*
+ * Tokens del Manual de Marca Corporativa Russell Bedford.
+ * Color principal: PAN 2748 RBI Space Blue. Complementarios: Sea Green,
+ * Earth Orange, Sky Blue y Mind Magenta, con sus tintes al 80/60/40/20 %.
+ * Tipografía principal: Lato. Secundaria (respaldo): Arial.
+ */
+:root {
+  /* Color institucional */
+  --rb-space-blue: #001871;
+  --rb-space-blue-80: #33468d;
+  --rb-space-blue-60: #6674aa;
+  --rb-space-blue-40: #99a3c6;
+  --rb-space-blue-20: #ccd1e3;
+  --rb-space-blue-05: #f2f3f8;
+
+  /* Colores complementarios */
+  --rb-sea-green: #00bfb3;
+  --rb-sea-green-20: #ccf2f0;
+  --rb-earth-orange: #ed8b00;
+  --rb-earth-orange-20: #fbe8cc;
+  --rb-sky-blue: #00a9ce;
+  --rb-sky-blue-20: #cceef5;
+  --rb-mind-magenta: #981d97;
+  --rb-mind-magenta-20: #ead2ea;
+
+  /* Neutros */
+  --color-white: #ffffff;
+  --color-text: #3c3c3b;
+  --color-text-muted: #6b6f7b;
+  --color-border: #d5d9e4;
+  --color-surface: #ffffff;
+  --color-page: #f4f5f9;
+
+  /* Roles semánticos */
+  --color-primary: var(--rb-space-blue);
+  --color-focus: var(--rb-sky-blue);
+  --color-required: var(--rb-earth-orange);
+  --color-error: var(--rb-mind-magenta);
+  --color-error-bg: var(--rb-mind-magenta-20);
+  --color-success: var(--rb-sea-green);
+  --color-success-bg: var(--rb-sea-green-20);
+  --color-info-bg: var(--rb-sky-blue-20);
+
+  /* Tipografía */
+  --font-family: 'Lato', Arial, sans-serif;
+  --weight-light: 300;
+  --weight-regular: 400;
+  --weight-bold: 700;
+  --weight-black: 900;
+
+  /* Espaciado y forma */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --shadow-card: 0 18px 40px -18px rgba(0, 24, 113, 0.28);
+  --focus-ring: 0 0 0 3px rgba(0, 169, 206, 0.25);
+  --transition: 180ms ease;
+
+  --content-width: 880px;
+}

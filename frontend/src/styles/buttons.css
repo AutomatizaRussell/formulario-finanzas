@@ -1,0 +1,60 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 52px;
+  padding: 0 var(--space-6);
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  font-size: 16px;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background var(--transition), box-shadow var(--transition), transform var(--transition);
+}
+
+.button:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.button:disabled {
+  cursor: progress;
+  opacity: 0.8;
+}
+
+.button--primary {
+  background: var(--color-primary);
+  color: var(--color-white);
+  box-shadow: 0 8px 20px -10px rgba(0, 24, 113, 0.6);
+}
+
+.button--primary:hover:not(:disabled) {
+  background: var(--rb-space-blue-80);
+  transform: translateY(-1px);
+}
+
+.button--secondary {
+  background: var(--color-surface);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.button--secondary:hover {
+  background: var(--rb-space-blue-05);
+}
+
+.button--block {
+  width: 100%;
+}
+
+.spinner {
+  animation: spin 900ms linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

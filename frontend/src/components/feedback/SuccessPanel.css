@@ -1,0 +1,42 @@
+.success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-7) var(--space-4);
+  text-align: center;
+  animation: fade-up 400ms ease-out;
+}
+
+.success__icon {
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: var(--color-success);
+  color: var(--color-white);
+}
+
+.success__title {
+  font-size: 32px;
+  font-weight: var(--weight-light);
+  color: var(--color-primary);
+  outline: none;
+}
+
+.success__text {
+  max-width: 460px;
+  color: var(--color-text-muted);
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

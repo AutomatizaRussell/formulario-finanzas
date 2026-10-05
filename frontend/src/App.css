@@ -1,0 +1,89 @@
+.page {
+  padding: var(--space-6) var(--space-4);
+}
+
+/* Sin overflow:hidden para que la barra de progreso pueda ser sticky */
+.card {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+  animation: card-in 500ms ease-out;
+}
+
+.card > .brand-header {
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  overflow: hidden;
+}
+
+.card > .brand-footer {
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  overflow: hidden;
+}
+
+.card__body {
+  padding: var(--space-7);
+}
+
+/* Títulos al estilo del manual: Lato Light con énfasis en Bold */
+.intro {
+  margin-bottom: var(--space-5);
+}
+
+.intro__eyebrow {
+  font-size: 13px;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--rb-sky-blue);
+}
+
+.intro__title {
+  margin-top: var(--space-1);
+  font-size: 40px;
+  font-weight: var(--weight-light);
+  line-height: 1.1;
+  color: var(--color-primary);
+}
+
+.intro__title strong {
+  font-weight: var(--weight-bold);
+}
+
+.intro__text {
+  margin-top: var(--space-3);
+  max-width: 600px;
+  color: var(--color-text-muted);
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: 0;
+  }
+
+  .card,
+  .card > .brand-header,
+  .card > .brand-footer {
+    border-radius: 0;
+  }
+
+  .card__body {
+    padding: var(--space-6) var(--space-5);
+  }
+
+  .intro__title {
+    font-size: 30px;
+  }
+}

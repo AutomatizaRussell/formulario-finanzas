@@ -1,0 +1,24 @@
+.color-bar {
+  display: flex;
+  height: 6px;
+}
+
+.color-bar__segment--blue {
+  flex: 34;
+  background: var(--rb-space-blue);
+}
+
+.color-bar__segment--magenta {
+  flex: 20;
+  background: var(--rb-mind-magenta);
+}
+
+.color-bar__segment--green {
+  flex: 36;
+  background: var(--rb-sea-green);
+}
+
+.color-bar__segment--orange {
+  flex: 10;
+  background: var(--rb-earth-orange);
+}

@@ -1,0 +1,50 @@
+.brand-footer {
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+}
+
+.brand-footer__content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding: 36px 48px;
+}
+
+.brand-footer__logo {
+  width: 160px;
+  height: auto;
+}
+
+.brand-footer__text {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  text-align: right;
+}
+
+.brand-footer__text a {
+  color: var(--color-primary);
+  font-weight: var(--weight-bold);
+  text-decoration: none;
+}
+
+.brand-footer__text a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .brand-footer__content {
+    flex-direction: column;
+    padding: 32px 24px;
+  }
+
+  .brand-footer__logo {
+    /* Ancho mínimo legible del logotipo (≈ 30 mm) */
+    width: 150px;
+  }
+
+  .brand-footer__text {
+    text-align: center;
+  }
+}

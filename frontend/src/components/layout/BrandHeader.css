@@ -1,0 +1,87 @@
+.brand-header__band {
+  position: relative;
+  overflow: hidden;
+  background: var(--rb-space-blue);
+  /* Espacio libre alrededor del logo ≥ 20 % de su ancho (manual 4.2) */
+  padding: 48px;
+}
+
+.brand-header__logo {
+  position: relative;
+  z-index: 1;
+  width: 240px;
+  height: auto;
+}
+
+/* Círculos decorativos de las portadillas del manual */
+.brand-header__circles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.circle {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.circle--green {
+  width: 64px;
+  height: 64px;
+  right: 120px;
+  top: 18px;
+  background: var(--rb-sea-green);
+}
+
+.circle--sky {
+  width: 34px;
+  height: 34px;
+  right: 56px;
+  top: 34px;
+  background: var(--rb-sky-blue);
+}
+
+.circle--orange {
+  width: 66px;
+  height: 66px;
+  right: 190px;
+  bottom: -18px;
+  background: var(--rb-earth-orange);
+}
+
+.circle--magenta {
+  width: 150px;
+  height: 150px;
+  right: -40px;
+  bottom: -80px;
+  background: var(--rb-mind-magenta);
+}
+
+@media (max-width: 640px) {
+  .brand-header__band {
+    padding: 36px 24px;
+  }
+
+  .brand-header__logo {
+    width: 180px;
+  }
+
+  .circle--green,
+  .circle--orange {
+    display: none;
+  }
+
+  .circle--sky {
+    right: 24px;
+    top: 16px;
+    width: 22px;
+    height: 22px;
+  }
+
+  .circle--magenta {
+    width: 90px;
+    height: 90px;
+    right: -30px;
+    bottom: -50px;
+  }
+}

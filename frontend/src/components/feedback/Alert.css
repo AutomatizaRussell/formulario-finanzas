@@ -1,0 +1,25 @@
+.alert {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--color-error);
+  background: var(--color-error-bg);
+  color: var(--color-text);
+}
+
+.alert__icon {
+  flex: none;
+  color: var(--color-error);
+}
+
+.alert__title {
+  font-weight: var(--weight-bold);
+  color: var(--color-error);
+}
+
+.alert__detail {
+  margin-top: var(--space-1);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}

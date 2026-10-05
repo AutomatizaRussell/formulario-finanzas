@@ -1,0 +1,108 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.field--full {
+  grid-column: 1 / -1;
+}
+
+.field__label {
+  font-size: 14px;
+  font-weight: var(--weight-bold);
+  color: var(--color-text);
+}
+
+.field__required {
+  margin-left: 3px;
+  color: var(--color-required);
+}
+
+.field__control {
+  position: relative;
+}
+
+.field__control input,
+.field__control select {
+  width: 100%;
+  height: 48px;
+  padding: 0 var(--space-4);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  font-size: 15px;
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.field__control input::placeholder {
+  color: #9aa0ad;
+}
+
+.field__control input:hover,
+.field__control select:hover {
+  border-color: var(--rb-space-blue-40);
+}
+
+.field__control input:focus,
+.field__control select:focus {
+  border-color: var(--color-focus);
+  box-shadow: var(--focus-ring);
+}
+
+.field__control--select select {
+  appearance: none;
+  padding-right: 44px;
+  cursor: pointer;
+}
+
+.field__control--select select.is-placeholder {
+  color: #9aa0ad;
+}
+
+.field__control--select option {
+  color: var(--color-text);
+}
+
+.field__chevron {
+  position: absolute;
+  right: var(--space-4);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-primary);
+  pointer-events: none;
+}
+
+.field__hint,
+.field__error {
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.field__hint {
+  color: var(--color-text-muted);
+}
+
+.field__error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-error);
+  font-weight: var(--weight-bold);
+}
+
+.field__error svg {
+  flex: none;
+}
+
+.field--invalid input,
+.field--invalid select {
+  border-color: var(--color-error);
+}
+
+.field--invalid input:focus,
+.field--invalid select:focus {
+  box-shadow: 0 0 0 3px rgba(152, 29, 151, 0.18);
+}
