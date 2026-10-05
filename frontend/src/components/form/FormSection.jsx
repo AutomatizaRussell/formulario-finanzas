@@ -15,21 +15,11 @@ export default function FormSection({ number, title, description, children }) {
           {description && <p className="form-section__description">{description}</p>}
         </div>
       </header>
-      <div className="form-section__body">{children}</div>
+      {children}
     </section>
   );
 }
 
-export function FieldGroup({ title, description, columns = 1, children }) {
-  return (
-    <div className="field-group">
-      {title && (
-        <div className="field-group__header">
-          <h3 className="field-group__title">{title}</h3>
-          {description && <p className="field-group__description">{description}</p>}
-        </div>
-      )}
-      <div className={`field-group__grid field-group__grid--cols-${columns}`}>{children}</div>
-    </div>
-  );
+export function FieldGrid({ columns = 1, children }) {
+  return <div className={`field-grid field-grid--cols-${columns}`}>{children}</div>;
 }

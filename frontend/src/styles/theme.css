@@ -8,7 +8,6 @@
   /* Color institucional */
   --rb-space-blue: #001871;
   --rb-space-blue-80: #33468d;
-  --rb-space-blue-60: #6674aa;
   --rb-space-blue-40: #99a3c6;
   --rb-space-blue-20: #ccd1e3;
   --rb-space-blue-05: #f2f3f8;
@@ -17,7 +16,6 @@
   --rb-sea-green: #00bfb3;
   --rb-sea-green-20: #ccf2f0;
   --rb-earth-orange: #ed8b00;
-  --rb-earth-orange-20: #fbe8cc;
   --rb-sky-blue: #00a9ce;
   --rb-sky-blue-20: #cceef5;
   --rb-mind-magenta: #981d97;
@@ -38,15 +36,11 @@
   --color-error: var(--rb-mind-magenta);
   --color-error-bg: var(--rb-mind-magenta-20);
   --color-success: var(--rb-sea-green);
-  --color-success-bg: var(--rb-sea-green-20);
-  --color-info-bg: var(--rb-sky-blue-20);
 
   /* Tipografía */
   --font-family: 'Lato', Arial, sans-serif;
   --weight-light: 300;
-  --weight-regular: 400;
   --weight-bold: 700;
-  --weight-black: 900;
 
   /* Espaciado y forma */
   --space-1: 4px;

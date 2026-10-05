@@ -58,7 +58,7 @@ export default function Field({ field, value, error, onChange, onBlur }) {
       )}
 
       {error ? (
-        <p id={errorId} className="field__error" role="alert">
+        <p id={errorId} className="field__error">
           <AlertIcon width={14} height={14} />
           {error}
         </p>

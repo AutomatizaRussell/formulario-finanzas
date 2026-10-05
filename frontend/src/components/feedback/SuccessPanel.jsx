@@ -18,8 +18,8 @@ export default function SuccessPanel({ onReset }) {
         Reporte recibido
       </h2>
       <p className="success__text">
-        La información y los soportes se enviaron correctamente. El equipo de Precios de
-        Transferencia se comunicará con el encargado registrado.
+        La información y el acumulado por tercero se enviaron correctamente al equipo de Precios
+        de Transferencia.
       </p>
       <button type="button" className="button button--secondary" onClick={onReset}>
         Enviar otro reporte

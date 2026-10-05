@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { formatFileSize } from '../../utils/formatters.js';
+import { fileKey, formatFileSize } from '../../utils/formatters.js';
 import { AlertIcon, CloseIcon, FileIcon, UploadIcon } from '../icons/Icons.jsx';
+// Comparte las clases de etiqueta y error con Field
+import './Field.css';
 import './FileDropzone.css';
 
 export default function FileDropzone({ field, files, error, onAdd, onRemove }) {
@@ -58,7 +60,7 @@ export default function FileDropzone({ field, files, error, onAdd, onRemove }) {
           Arrastre sus archivos aquí o <span className="dropzone__link">selecciónelos</span>
         </span>
         <span className="dropzone__meta">
-          Formato {field.accept.join(', ')} · Máximo {field.maxSizeMb} MB por archivo · Puede adjuntar varios
+          Formato {field.accept.join(', ')} · Máximo {field.maxSizeMb} MB por archivo · Hasta {field.maxFiles} archivos
         </span>
         <input
           id={id}
@@ -75,7 +77,7 @@ export default function FileDropzone({ field, files, error, onAdd, onRemove }) {
       </label>
 
       {error && (
-        <p id={errorId} className="field__error" role="alert">
+        <p id={errorId} className="field__error">
           <AlertIcon width={14} height={14} />
           {error}
         </p>
@@ -84,7 +86,7 @@ export default function FileDropzone({ field, files, error, onAdd, onRemove }) {
       {files.length > 0 && (
         <ul className="file-list" aria-label="Archivos adjuntos">
           {files.map((file) => (
-            <li key={`${file.name}-${file.lastModified}`} className="file-list__item">
+            <li key={fileKey(file)} className="file-list__item">
               <FileIcon className="file-list__icon" />
               <span className="file-list__name">{file.name}</span>
               <span className="file-list__size">{formatFileSize(file.size)}</span>

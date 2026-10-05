@@ -1,11 +1,13 @@
 import { ALL_FIELDS, FILE_FIELD } from '../config/formSchema.js';
 
+export const FILE_REQUIRED_MESSAGE = 'Adjunte al menos un archivo.';
+
 export function validateField(field, value) {
   if (!value?.trim()) {
     return field.type === 'select' ? 'Seleccione una opción.' : 'Este campo es obligatorio.';
   }
-  if (field.type === 'digits' && value.length < 5) {
-    return 'El NIT parece incompleto.';
+  if (field.minLength && value.length < field.minLength) {
+    return field.minLengthMessage ?? `Ingrese al menos ${field.minLength} caracteres.`;
   }
   return null;
 }
@@ -28,7 +30,7 @@ export function validateForm(values, files) {
     if (error) errors[field.name] = error;
   }
   if (files.length === 0) {
-    errors[FILE_FIELD.name] = 'Adjunte al menos un archivo.';
+    errors[FILE_FIELD.name] = FILE_REQUIRED_MESSAGE;
   }
   return errors;
 }

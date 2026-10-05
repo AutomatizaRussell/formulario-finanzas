@@ -1,5 +1,4 @@
 const express = require('express');
-const cors = require('cors');
 const multer = require('multer');
 const axios = require('axios');
 const FormData = require('form-data');
@@ -9,15 +8,15 @@ const path = require('path');
 
 const PORT = process.env.PORT || 3000;
 const N8N_WEBHOOK_URL = process.env.N8N_WEBHOOK_URL || 'https://n8n.rbgct.cloud/webhook/financiera';
+const FILE_FIELD = 'soporte_financiero';
+const MAX_FILES = 10;
 const MAX_FILE_SIZE_MB = 20;
 
 const app = express();
 const upload = multer({
   dest: path.join(os.tmpdir(), 'formulario-finanzas'),
-  limits: { fileSize: MAX_FILE_SIZE_MB * 1024 * 1024 },
+  limits: { fileSize: MAX_FILE_SIZE_MB * 1024 * 1024, files: MAX_FILES },
 });
-
-app.use(cors());
 
 /** Reenvía campos y archivos a n8n con los mismos nombres que espera el flujo. */
 function buildN8nPayload(fields, files) {
@@ -42,7 +41,7 @@ function removeTempFiles(files) {
 
 app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
 
-app.post('/api/enviar-formulario', upload.any(), async (req, res) => {
+app.post('/api/enviar-formulario', upload.array(FILE_FIELD, MAX_FILES), async (req, res) => {
   const files = req.files ?? [];
   try {
     const payload = buildN8nPayload(req.body, files);
@@ -60,14 +59,19 @@ app.post('/api/enviar-formulario', upload.any(), async (req, res) => {
   }
 });
 
-// Errores de multer (p. ej. archivo mayor al límite)
+const MULTER_MESSAGES = {
+  LIMIT_FILE_SIZE: `Cada archivo debe pesar máximo ${MAX_FILE_SIZE_MB} MB.`,
+  LIMIT_FILE_COUNT: `Puede adjuntar máximo ${MAX_FILES} archivos.`,
+  LIMIT_UNEXPECTED_FILE: 'Se recibió un archivo en un campo no permitido.',
+};
+
+// Express identifica el manejador de errores por sus 4 parámetros, aunque `_next` no se use
 app.use((error, _req, res, _next) => {
   if (error instanceof multer.MulterError) {
-    const message =
-      error.code === 'LIMIT_FILE_SIZE'
-        ? `Cada archivo debe pesar máximo ${MAX_FILE_SIZE_MB} MB.`
-        : error.message;
-    return res.status(413).json({ status: 'error', message });
+    const status = error.code === 'LIMIT_FILE_SIZE' ? 413 : 400;
+    return res
+      .status(status)
+      .json({ status: 'error', message: MULTER_MESSAGES[error.code] ?? error.message });
   }
   console.error('Error inesperado:', error);
   return res.status(500).json({ status: 'error', message: 'Error interno del servidor.' });

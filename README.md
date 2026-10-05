@@ -12,6 +12,7 @@ backend/    Node/Express · recibe el formulario y lo reenvía a n8n
 ```bash
 cd backend && npm install && npm start      # API en http://localhost:3000
 cd frontend && npm install && npm run dev   # App en http://localhost:5173 (proxy /api → 3000)
+cd frontend && npm run lint                 # Revisión de código con ESLint
 ```
 
 ## Despliegue en Coolify

@@ -42,54 +42,17 @@
   color: var(--color-text-muted);
 }
 
-.form-section__body {
-  display: grid;
-  gap: var(--space-6);
-}
-
-.field-group__header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--space-2) var(--space-3);
-  padding-bottom: var(--space-2);
-  margin-bottom: var(--space-4);
-  border-bottom: 2px solid var(--rb-sea-green);
-}
-
-.field-group__title {
-  font-size: 15px;
-  font-weight: var(--weight-bold);
-  color: var(--color-primary);
-}
-
-.field-group__description {
-  font-size: 13px;
-  color: var(--color-text-muted);
-}
-
-.field-group__grid {
+.field-grid {
   display: grid;
   gap: var(--space-5);
 }
 
-.field-group__grid--cols-2 {
+.field-grid--cols-2 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.field-group__grid--cols-3 {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-@media (max-width: 760px) {
-  .field-group__grid--cols-3 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
 @media (max-width: 560px) {
-  .field-group__grid--cols-2,
-  .field-group__grid--cols-3 {
+  .field-grid--cols-2 {
     grid-template-columns: minmax(0, 1fr);
   }
 

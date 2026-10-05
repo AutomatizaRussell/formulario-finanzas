@@ -4,7 +4,7 @@ import Alert from './feedback/Alert.jsx';
 import SuccessPanel from './feedback/SuccessPanel.jsx';
 import Field from './form/Field.jsx';
 import FileDropzone from './form/FileDropzone.jsx';
-import FormSection, { FieldGroup } from './form/FormSection.jsx';
+import FormSection, { FieldGrid } from './form/FormSection.jsx';
 import ProgressBar from './form/ProgressBar.jsx';
 import { SpinnerIcon } from './icons/Icons.jsx';
 import './ReportForm.css';
@@ -15,7 +15,7 @@ const SUBMIT_LABELS = {
   [STATUS.ERROR]: 'Reintentar envío',
 };
 
-const FIELD_ORDER =[...ALL_FIELDS.map((field) => field.name), FILE_FIELD.name];
+const FIELD_ORDER = [...ALL_FIELDS.map((field) => field.name), FILE_FIELD.name];
 
 function focusFirstError(errors) {
   const firstInvalid = FIELD_ORDER.find((name) => errors[name]);
@@ -53,20 +53,18 @@ export default function ReportForm() {
           title={section.title}
           description={section.description}
         >
-          {section.groups.map((group, groupIndex) => (
-            <FieldGroup key={groupIndex} {...group}>
-              {group.fields.map((field) => (
-                <Field
-                  key={field.name}
-                  field={field}
-                  value={form.values[field.name]}
-                  error={form.errors[field.name]}
-                  onChange={form.handleChange}
-                  onBlur={form.handleBlur}
-                />
-              ))}
-            </FieldGroup>
-          ))}
+          <FieldGrid columns={section.columns}>
+            {section.fields.map((field) => (
+              <Field
+                key={field.name}
+                field={field}
+                value={form.values[field.name]}
+                error={form.errors[field.name]}
+                onChange={form.handleChange}
+                onBlur={form.handleBlur}
+              />
+            ))}
+          </FieldGrid>
         </FormSection>
       ))}
 
