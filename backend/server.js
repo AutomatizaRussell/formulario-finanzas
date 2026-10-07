@@ -77,4 +77,4 @@ app.use((error, _req, res, _next) => {
   return res.status(500).json({ status: 'error', message: 'Error interno del servidor.' });
 });
 
-app.listen(PORT, () => console.log(`API de Precios de Transferencia en puerto ${PORT}`));
+app.listen(PORT, () => console.log(`API de Base de datos Russell en puerto ${PORT}`));

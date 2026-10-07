@@ -1,0 +1,567 @@
+{
+  "name": "Flujo-financiera v4 (SharePoint)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "financiera",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -656,
+        0
+      ],
+      "id": "bfe1c405-dcf6-4d40-9ee7-131d0e9c4c6b",
+      "name": "Se envio una respuesta",
+      "webhookId": "4bd559a1-cf8b-416b-ae2c-764f1adcd55f"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===== CONFIGURACIÓN (cambiar aquí) =====\nconst CONFIG = {\n  DRIVE_ID: 'b!A_gs-UIBkkSRY-pKFZcuyNi87qYccLlJvZ-a5Y4rRAFv9vyPEXIXQZnRz1y4Vgw4',\n  RUTA_CARPETA_RAIZ: 'Documentación 2026/2. CLIENTES/PRECIOS TRANSFERFENCIA',\n  RUTA_EXCEL: 'Documentación 2026/2. CLIENTES/PRECIOS TRANSFERFENCIA/INFORMACION-FORMULARIO-PT.xlsx',\n  TABLA_EXCEL: 'DATA',\n};\n// Pasa los datos del formulario y los archivos tal cual al siguiente nodo\nconst item = $input.first();\nreturn [{ json: { ...CONFIG, body: item.json.body || {} }, binary: item.binary || {} }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -432,
+        0
+      ],
+      "id": "cef402c3-c434-45f3-8afa-7ce2e4266b9c",
+      "name": "CONFIGURACION"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e1a2adb1-16c8-4c27-9f40-c4879b3cd410",
+              "name": "FECHA_ENVIO",
+              "value": "={{ $now.setZone('America/Bogota').toFormat('yyyy-LL-dd HH:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "e96bd7d2-5d83-49d2-adc5-239a66592ac6",
+              "name": "NOMBRE_CARPETA",
+              "value": "={{ (($json.body.nit_razon_social || '') + ' - ' + ($json.body.razon_social || '') + ' - ' + $now.setZone('America/Bogota').toFormat('yyyy-LL-dd HHmm')).replace(/[\\\\/:*?\"<>|#%~&{}]/g, '').replace(/\\s+/g, ' ').trim().replace(/\\.+$/, '').slice(0, 150) }}",
+              "type": "string"
+            },
+            {
+              "id": "d9947561-1917-4a98-b4cf-772171b17606",
+              "name": "RAZON_SOCIAL",
+              "value": "={{ $json.body.razon_social }}",
+              "type": "string"
+            },
+            {
+              "id": "1fc30c24-2590-4dbf-bb6c-26c0b8438f9d",
+              "name": "NIT",
+              "value": "={{ $json.body.nit_razon_social }}",
+              "type": "string"
+            },
+            {
+              "id": "80bd098f-bc4d-4ee0-9ea2-7091ac4d7165",
+              "name": "SECTOR",
+              "value": "={{ $json.body.sector }}",
+              "type": "string"
+            },
+            {
+              "id": "6d257bf7-5689-4317-b442-f9e519dfe02c",
+              "name": "ZONA_FRANCA",
+              "value": "={{ $json.body.vinc_zona_franca }}",
+              "type": "string"
+            },
+            {
+              "id": "02c718ad-d0b8-452c-9d22-b8b10d8cd216",
+              "name": "VINCULACION_EXTERIOR",
+              "value": "={{ $json.body.vinc_exterior }}",
+              "type": "string"
+            },
+            {
+              "id": "65e2fe96-dc9b-424d-882e-2ae5f1f4a3f0",
+              "name": "SENIOR_CARGO",
+              "value": "={{ $json.body.senior_cargo }}",
+              "type": "string"
+            },
+            {
+              "id": "ecbb3f78-26a5-45c4-8fd9-9784ab609aee",
+              "name": "VINCULADOS_RAZON_SOCIAL",
+              "value": "={{ $json.body.razon_social_vinculados }}",
+              "type": "string"
+            },
+            {
+              "id": "a4da298d-ace3-4e59-9557-5bea9026db39",
+              "name": "DETALLE_SERVICIOS",
+              "value": "={{ $json.body.detalle_servicios }}",
+              "type": "string"
+            },
+            {
+              "id": "f22cdae8-4cb9-448c-8003-7d0529acf234",
+              "name": "DETALLE_PRESTAMOS",
+              "value": "={{ $json.body.detalle_prestamos }}",
+              "type": "string"
+            },
+            {
+              "id": "b98f7147-72de-4737-b853-95e85d4d7bb2",
+              "name": "PAISES_NO_COOPERANTES",
+              "value": "={{ $json.body.paises_no_cooperantes }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -208,
+        0
+      ],
+      "id": "dc3d595e-64c4-4562-9cce-26eed9e09a0a",
+      "name": "INFORMACION"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.DRIVE_ID }}/root:/{{ $json.RUTA_CARPETA_RAIZ.split('/').map(s => encodeURIComponent(s)).join('/') }}:/children",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftOneDriveOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ name: $json.NOMBRE_CARPETA, folder: {}, '@microsoft.graph.conflictBehavior': 'rename' }) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        16,
+        0
+      ],
+      "id": "10304d3f-222a-4360-8cb9-00b8df6b871b",
+      "name": "CREAR CARPETA SOLICITUD",
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "KWol507krI9qoDdm",
+          "name": "Microsoft Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Toma los archivos del webhook (soporte_financiero o soporte_financiero_0, _1, ...)\n// y genera un item por archivo con el ID de la carpeta recién creada.\nconst binarios = $('CONFIGURACION').first().binary || {};\nconst carpeta = $input.first().json;\n\n// Corrige nombres que llegan con tildes mal codificadas (p. ej. \"SUBÃREA\" -> \"SUBÁREA\")\nconst arreglarNombre = (nombre) => {\n  let n = String(nombre || 'archivo.xlsx');\n  if (/[ÃÂ]/.test(n)) {\n    try { n = Buffer.from(n, 'latin1').toString('utf8'); } catch (e) {}\n  }\n  return n.replace(/[\\\\/:*?\"<>|#%]/g, '').trim();\n};\n\nconst items = [];\nfor (const key of Object.keys(binarios).sort()) {\n  if (!key.startsWith('soporte_financiero')) continue;\n  const archivo = { ...binarios[key] };\n  archivo.fileName = arreglarNombre(archivo.fileName);\n  items.push({\n    json: { carpetaId: carpeta.id, carpetaUrl: carpeta.webUrl, archivo: archivo.fileName },\n    binary: { archivo_actual: archivo },\n  });\n}\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        256,
+        112
+      ],
+      "id": "5c47710c-7fa5-4b50-b2f3-fec85ff7c662",
+      "name": "PREPARAR ARCHIVOS"
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('INFORMACION').first().json.DRIVE_ID }}/items/{{ $json.carpetaId }}:/{{ encodeURIComponent($binary.archivo_actual.fileName) }}:/content?@microsoft.graph.conflictBehavior=rename",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftOneDriveOAuth2Api",
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "archivo_actual",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        480,
+        112
+      ],
+      "id": "302e2f0a-32a3-45ba-8b20-601eb4570114",
+      "name": "SUBIR ARCHIVO",
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "KWol507krI9qoDdm",
+          "name": "Microsoft Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Arma la fila para la tabla del Excel en SharePoint.\n// El ORDEN debe coincidir exactamente con las columnas de la tabla.\nconst d = $('INFORMACION').first().json;\nconst carpeta = $input.first().json;\nconst binarios = $('CONFIGURACION').first().binary || {};\nconst cantidadArchivos = Object.keys(binarios).filter(k => k.startsWith('soporte_financiero')).length;\n\nconst texto = (v) => {\n  const t = String(v ?? '').trim();\n  return t;\n};\nconst legible = (v) => texto(String(v ?? '').replace(/_/g, ' '));\n\nconst fila = [\n  String($execution.id),          // ID SOLICITUD\n  d.FECHA_ENVIO,                  // FECHA ENVÍO\n  texto(d.RAZON_SOCIAL),          // RAZÓN SOCIAL\n  texto(d.NIT),                   // NIT RAZÓN SOCIAL\n  legible(d.SECTOR),              // SECTOR AL QUE PERTENECE\n  texto(d.ZONA_FRANCA),           // ¿POSEE VINCULADOS EN ZONA FRANCA?\n  texto(d.VINCULACION_EXTERIOR),  // ¿POSEE VINCULADOS EN EL EXTERIOR?\n  legible(d.SENIOR_CARGO),        // SENIOR A CARGO\n  texto(d.VINCULADOS_RAZON_SOCIAL), // RAZÓN SOCIAL DE LOS VINCULADOS\n  texto(d.DETALLE_SERVICIOS),     // VENTA DE BIENES O PRESTACIÓN DE SERVICIOS\n  texto(d.DETALLE_PRESTAMOS),     // SALDOS O MOVIMIENTOS DE PRÉSTAMOS\n  texto(d.PAISES_NO_COOPERANTES), // OPERACIONES EN JURISDICCIONES NO COOPERANTES\n  cantidadArchivos,               // CANTIDAD DE ARCHIVOS\n  carpeta.webUrl || '',           // CARPETA SHAREPOINT\n];\nreturn [{ json: { fila } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        256,
+        -112
+      ],
+      "id": "32a47031-f41d-415e-b7bd-3a5cee152816",
+      "name": "ARMAR FILA EXCEL"
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('INFORMACION').first().json.DRIVE_ID }}/root:/{{ $('INFORMACION').first().json.RUTA_EXCEL.split('/').map(s => encodeURIComponent(s)).join('/') }}:/content",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftOneDriveOAuth2Api",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "data"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        480,
+        -112
+      ],
+      "id": "79df43f6-9f2c-4854-999e-58f86f6271c3",
+      "name": "DESCARGAR EXCEL",
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "KWol507krI9qoDdm",
+          "name": "Microsoft Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "binaryPropertyName": "data",
+        "options": {
+          "sheetName": "={{ $('INFORMACION').first().json.HOJA_EXCEL }}"
+        }
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        704,
+        -112
+      ],
+      "id": "4185885d-18d5-4efe-93cb-e11505884330",
+      "name": "LEER EXCEL",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Junta las filas existentes con la fila nueva y genera el Excel con formato Russell Bedford\n// (encabezado azul RB, filas alternas, bordes, filtros, panel inmovilizado y enlace a la carpeta).\n// HEADERS debe coincidir con la fila 1 del Excel.\nconst COLUMNAS = [\n  ['ID SOLICITUD', 12, 'c'],\n  ['FECHA ENVÍO', 17, 'c'],\n  ['RAZÓN SOCIAL', 30, 'l'],\n  ['NIT RAZÓN SOCIAL', 16, 'c'],\n  ['SECTOR AL QUE PERTENECE', 28, 'l'],\n  ['¿POSEE VINCULADOS EN ZONA FRANCA?', 16, 'c'],\n  ['¿POSEE VINCULADOS EN EL EXTERIOR?', 16, 'c'],\n  ['SENIOR A CARGO', 30, 'l'],\n  ['RAZÓN SOCIAL DE LOS VINCULADOS', 32, 'l'],\n  ['VENTA DE BIENES O PRESTACIÓN DE SERVICIOS CON LA MATRIZ O VINCULADOS', 38, 'l'],\n  ['SALDOS O MOVIMIENTOS DE PRÉSTAMOS VIGENTES CON VINCULADOS', 38, 'l'],\n  ['OPERACIONES EN JURISDICCIONES NO COOPERANTES O DE BAJA IMPOSICIÓN', 38, 'l'],\n  ['CANTIDAD DE ARCHIVOS', 13, 'c'],\n  ['CARPETA SHAREPOINT', 45, 'link'],\n];\nconst HEADERS = COLUMNAS.map(c => c[0]);\nconst HOJA = $('INFORMACION').first().json.HOJA_EXCEL || 'DATOS';\nconst NOMBRE = $('INFORMACION').first().json.RUTA_EXCEL.split('/').pop();\n\n// ---------- 1. Datos ----------\nconst existentes = $input.all()\n  .map(i => i.json)\n  .filter(r => Object.values(r).some(v => String(v ?? '').trim() !== ''))\n  .map(r => HEADERS.map(h => r[h] ?? ''));\nconst filas = [...existentes, $('ARMAR FILA EXCEL').first().json.fila];\n\n// ---------- 2. XML de la hoja ----------\nconst esc = (v) => String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;')\n  .replace(/[\\u0000-\\u0008\\u000B\\u000C\\u000E-\\u001F]/g, '');\nconst col = (i) => { let s = ''; i++; while (i) { const m = (i - 1) % 26; s = String.fromCharCode(65 + m) + s; i = Math.floor((i - 1) / 26); } return s; };\nconst ultimaCol = col(HEADERS.length - 1);\nconst ultimaFila = filas.length + 1;\n\n// estilos: 1 encabezado | 2/3 texto izq (par/impar) | 4/5 centrado | 6/7 enlace\nconst estilo = (tipo, r) => {\n  const impar = r % 2 === 1 ? 1 : 0;\n  if (tipo === 'c') return 4 + impar;\n  if (tipo === 'link') return 6 + impar;\n  return 2 + impar;\n};\nconst celda = (ref, v, s, tipo) => {\n  if (tipo === 'link' && /^https?:\\/\\//.test(String(v))) {\n    const url = String(v).replace(/\"/g, '\"\"');\n    return `<c r=\"${ref}\" s=\"${s}\" t=\"str\"><f>${esc(`HYPERLINK(\"${url}\")`)}</f><v>${esc(v)}</v></c>`;\n  }\n  if (typeof v === 'number' && isFinite(v)) return `<c r=\"${ref}\" s=\"${s}\"><v>${v}</v></c>`;\n  return `<c r=\"${ref}\" s=\"${s}\" t=\"inlineStr\"><is><t xml:space=\"preserve\">${esc(v)}</t></is></c>`;\n};\n\nlet filasXml = `<row r=\"1\" ht=\"42\" customHeight=\"1\">` +\n  HEADERS.map((h, i) => celda(`${col(i)}1`, h, 1)).join('') + `</row>`;\nfilas.forEach((f, idx) => {\n  const r = idx + 2;\n  filasXml += `<row r=\"${r}\">` + COLUMNAS.map((c, i) => celda(`${col(i)}${r}`, f[i], estilo(c[2], idx), c[2])).join('') + `</row>`;\n});\n\nconst sheet = `<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\">\n<sheetPr><tabColor rgb=\"FF001871\"/></sheetPr>\n<dimension ref=\"A1:${ultimaCol}${ultimaFila}\"/>\n<sheetViews><sheetView workbookViewId=\"0\" showGridLines=\"0\" zoomScale=\"90\"><pane ySplit=\"1\" xSplit=\"3\" topLeftCell=\"D2\" activePane=\"bottomRight\" state=\"frozen\"/></sheetView></sheetViews>\n<sheetFormatPr defaultRowHeight=\"20\"/>\n<cols>${COLUMNAS.map((c, i) => `<col min=\"${i + 1}\" max=\"${i + 1}\" width=\"${c[1]}\" customWidth=\"1\"/>`).join('')}</cols>\n<sheetData>${filasXml}</sheetData>\n<pageMargins left=\"0.4\" right=\"0.4\" top=\"0.5\" bottom=\"0.5\" header=\"0.3\" footer=\"0.3\"/>\n<pageSetup orientation=\"landscape\" fitToHeight=\"0\"/>\n<tableParts count=\"1\"><tablePart r:id=\"rId1\"/></tableParts>\n</worksheet>`;\n\nconst table = `<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<table xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" id=\"1\" name=\"DATA\" displayName=\"DATA\" ref=\"A1:${ultimaCol}${ultimaFila}\" headerRowCount=\"1\">\n<autoFilter ref=\"A1:${ultimaCol}${ultimaFila}\"/>\n<tableColumns count=\"${HEADERS.length}\">${HEADERS.map((h, i) => `<tableColumn id=\"${i + 1}\" name=\"${esc(h)}\"/>`).join('')}</tableColumns>\n<tableStyleInfo showFirstColumn=\"0\" showLastColumn=\"0\" showRowStripes=\"0\" showColumnStripes=\"0\"/>\n</table>`;\n\n// Paleta Russell Bedford: Space Blue 001871, Sky Blue 00A9CE (tinte 20 % = CCEEF5), Sea Green 00BFB3\nconst styles = `<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<styleSheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">\n<fonts count=\"4\">\n<font><sz val=\"10\"/><color rgb=\"FF1F2A44\"/><name val=\"Lato\"/><family val=\"2\"/></font>\n<font><b/><sz val=\"10\"/><color rgb=\"FFFFFFFF\"/><name val=\"Lato\"/><family val=\"2\"/></font>\n<font><sz val=\"10\"/><color rgb=\"FF1F2A44\"/><name val=\"Lato\"/><family val=\"2\"/></font>\n<font><u/><sz val=\"10\"/><color rgb=\"FF00A9CE\"/><name val=\"Lato\"/><family val=\"2\"/></font>\n</fonts>\n<fills count=\"5\">\n<fill><patternFill patternType=\"none\"/></fill>\n<fill><patternFill patternType=\"gray125\"/></fill>\n<fill><patternFill patternType=\"solid\"><fgColor rgb=\"FF001871\"/><bgColor indexed=\"64\"/></patternFill></fill>\n<fill><patternFill patternType=\"solid\"><fgColor rgb=\"FFFFFFFF\"/><bgColor indexed=\"64\"/></patternFill></fill>\n<fill><patternFill patternType=\"solid\"><fgColor rgb=\"FFE6F6FA\"/><bgColor indexed=\"64\"/></patternFill></fill>\n</fills>\n<borders count=\"3\">\n<border><left/><right/><top/><bottom/><diagonal/></border>\n<border><left style=\"thin\"><color rgb=\"FF001871\"/></left><right style=\"thin\"><color rgb=\"FF001871\"/></right><top style=\"thin\"><color rgb=\"FF001871\"/></top><bottom style=\"medium\"><color rgb=\"FF00BFB3\"/></bottom><diagonal/></border>\n<border><left style=\"thin\"><color rgb=\"FFC9D0E3\"/></left><right style=\"thin\"><color rgb=\"FFC9D0E3\"/></right><top style=\"thin\"><color rgb=\"FFC9D0E3\"/></top><bottom style=\"thin\"><color rgb=\"FFC9D0E3\"/></bottom><diagonal/></border>\n</borders>\n<cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>\n<cellXfs count=\"8\">\n<xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\" xfId=\"0\"/>\n<xf numFmtId=\"0\" fontId=\"1\" fillId=\"2\" borderId=\"1\" xfId=\"0\" applyFont=\"1\" applyFill=\"1\" applyBorder=\"1\" applyAlignment=\"1\"><alignment horizontal=\"center\" vertical=\"center\" wrapText=\"1\"/></xf>\n<xf numFmtId=\"49\" fontId=\"2\" fillId=\"3\" borderId=\"2\" xfId=\"0\" applyNumberFormat=\"1\" applyFont=\"1\" applyFill=\"1\" applyBorder=\"1\" applyAlignment=\"1\"><alignment vertical=\"top\" wrapText=\"1\" indent=\"1\"/></xf>\n<xf numFmtId=\"49\" fontId=\"2\" fillId=\"4\" borderId=\"2\" xfId=\"0\" applyNumberFormat=\"1\" applyFont=\"1\" applyFill=\"1\" applyBorder=\"1\" applyAlignment=\"1\"><alignment vertical=\"top\" wrapText=\"1\" indent=\"1\"/></xf>\n<xf numFmtId=\"0\" fontId=\"2\" fillId=\"3\" borderId=\"2\" xfId=\"0\" applyFont=\"1\" applyFill=\"1\" applyBorder=\"1\" applyAlignment=\"1\"><alignment horizontal=\"center\" vertical=\"top\" wrapText=\"1\"/></xf>\n<xf numFmtId=\"0\" fontId=\"2\" fillId=\"4\" borderId=\"2\" xfId=\"0\" applyFont=\"1\" applyFill=\"1\" applyBorder=\"1\" applyAlignment=\"1\"><alignment horizontal=\"center\" vertical=\"top\" wrapText=\"1\"/></xf>\n<xf numFmtId=\"0\" fontId=\"3\" fillId=\"3\" borderId=\"2\" xfId=\"0\" applyFont=\"1\" applyFill=\"1\" applyBorder=\"1\" applyAlignment=\"1\"><alignment vertical=\"top\"/></xf>\n<xf numFmtId=\"0\" fontId=\"3\" fillId=\"4\" borderId=\"2\" xfId=\"0\" applyFont=\"1\" applyFill=\"1\" applyBorder=\"1\" applyAlignment=\"1\"><alignment vertical=\"top\"/></xf>\n</cellXfs>\n<cellStyles count=\"1\"><cellStyle name=\"Normal\" xfId=\"0\" builtinId=\"0\"/></cellStyles>\n</styleSheet>`;\n\nconst archivos = {\n  '[Content_Types].xml': `<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<Types xmlns=\"http://schemas.openxmlformats.org/package/2006/content-types\">\n<Default Extension=\"rels\" ContentType=\"application/vnd.openxmlformats-package.relationships+xml\"/>\n<Default Extension=\"xml\" ContentType=\"application/xml\"/>\n<Override PartName=\"/xl/workbook.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml\"/>\n<Override PartName=\"/xl/worksheets/sheet1.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml\"/>\n<Override PartName=\"/xl/tables/table1.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.spreadsheetml.table+xml\"/>\n<Override PartName=\"/xl/styles.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml\"/>\n</Types>`,\n  '_rels/.rels': `<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\"><Relationship Id=\"rId1\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument\" Target=\"xl/workbook.xml\"/></Relationships>`,\n  'xl/workbook.xml': `<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<workbook xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\"><sheets><sheet name=\"${esc(HOJA)}\" sheetId=\"1\" r:id=\"rId1\"/></sheets></workbook>`,\n  'xl/_rels/workbook.xml.rels': `<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\"><Relationship Id=\"rId1\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet\" Target=\"worksheets/sheet1.xml\"/><Relationship Id=\"rId2\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles\" Target=\"styles.xml\"/></Relationships>`,\n  'xl/worksheets/sheet1.xml': sheet,\n  'xl/worksheets/_rels/sheet1.xml.rels': `<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\"><Relationship Id=\"rId1\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/table\" Target=\"../tables/table1.xml\"/></Relationships>`,\n  'xl/tables/table1.xml': table,\n  'xl/styles.xml': styles,\n};\n\n// ---------- 3. ZIP (sin compresión) ----------\nconst CRC = (() => { const t = []; for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();\nconst crc32 = (b) => { let c = 0xFFFFFFFF; for (let i = 0; i < b.length; i++) c = CRC[(c ^ b[i]) & 0xFF] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; };\nconst partes = [], central = [];\nlet offset = 0;\nfor (const [nombre, contenido] of Object.entries(archivos)) {\n  const n = Buffer.from(nombre, 'utf8'), d = Buffer.from(contenido, 'utf8'), crc = crc32(d);\n  const h = Buffer.alloc(30);\n  h.writeUInt32LE(0x04034b50, 0); h.writeUInt16LE(20, 4); h.writeUInt16LE(0x0800, 6); h.writeUInt16LE(0, 8);\n  h.writeUInt16LE(0, 10); h.writeUInt16LE(0x21, 12); h.writeUInt32LE(crc, 14);\n  h.writeUInt32LE(d.length, 18); h.writeUInt32LE(d.length, 22); h.writeUInt16LE(n.length, 26); h.writeUInt16LE(0, 28);\n  partes.push(h, n, d);\n  const c = Buffer.alloc(46);\n  c.writeUInt32LE(0x02014b50, 0); c.writeUInt16LE(20, 4); c.writeUInt16LE(20, 6); c.writeUInt16LE(0x0800, 8);\n  c.writeUInt16LE(0, 10); c.writeUInt16LE(0, 12); c.writeUInt16LE(0x21, 14); c.writeUInt32LE(crc, 16);\n  c.writeUInt32LE(d.length, 20); c.writeUInt32LE(d.length, 24); c.writeUInt16LE(n.length, 28);\n  c.writeUInt32LE(offset, 42);\n  central.push(c, n);\n  offset += 30 + n.length + d.length;\n}\nconst cd = Buffer.concat(central);\nconst fin = Buffer.alloc(22);\nfin.writeUInt32LE(0x06054b50, 0); fin.writeUInt16LE(Object.keys(archivos).length, 8); fin.writeUInt16LE(Object.keys(archivos).length, 10);\nfin.writeUInt32LE(cd.length, 12); fin.writeUInt32LE(offset, 16);\nconst xlsx = Buffer.concat([...partes, cd, fin]);\n\nconst MIME = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';\n// Se devuelve en base64 (n8n lo convierte a archivo); no usar this.helpers aquí\nconst binario = { data: xlsx.toString('base64'), mimeType: MIME, fileName: NOMBRE, fileExtension: 'xlsx' };\n\nreturn [{ json: { filas: filas.length }, binary: { data: binario } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        928,
+        -112
+      ],
+      "id": "7ff992fb-0f0a-4cf8-a87f-8560dad67fee",
+      "name": "ARMAR EXCEL RB"
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('INFORMACION').first().json.DRIVE_ID }}/root:/{{ $('INFORMACION').first().json.RUTA_EXCEL.split('/').map(s => encodeURIComponent(s)).join('/') }}:/content?@microsoft.graph.conflictBehavior=replace",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftOneDriveOAuth2Api",
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1152,
+        -112
+      ],
+      "id": "7cbc83f7-3b0a-434b-a76b-e82bc79e3a92",
+      "name": "SUBIR EXCEL",
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "KWol507krI9qoDdm",
+          "name": "Microsoft Drive account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c9427c8c-880b-4d51-a1e5-c8668c9128e0",
+              "leftValue": "={{ $runIndex }}",
+              "rightValue": 10,
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1376,
+        48
+      ],
+      "id": "1f19e618-4249-4cae-9798-96a944e544b3",
+      "name": "¿REINTENTAR?"
+    },
+    {
+      "parameters": {
+        "amount": 60,
+        "unit": "seconds"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1600,
+        -16
+      ],
+      "id": "2f24504c-71fb-47ac-998e-44da75049bb2",
+      "name": "ESPERAR 1 MIN",
+      "webhookId": "53b63734-44d7-41f9-b75c-c2a7c597bb4c"
+    },
+    {
+      "parameters": {
+        "errorMessage": "No se pudo guardar el Excel después de 10 intentos (probablemente alguien lo tiene abierto). Revisa los datos en la carpeta de la solicitud y vuelve a ejecutar."
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        1600,
+        144
+      ],
+      "id": "ad8039f4-59bd-4d02-a4d0-49434ee85159",
+      "name": "EXCEL BLOQUEADO"
+    },
+    {
+      "parameters": {
+        "content": "## 1. RESPUESTA DEL FORMULARIO\nWebhook `/financiera` (lo llama el backend del formulario web).",
+        "height": 336,
+        "width": 400
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -704,
+        -176
+      ],
+      "id": "e92ac439-4661-4833-afa4-d7def678fe34",
+      "name": "Nota e35a"
+    },
+    {
+      "parameters": {
+        "content": "## 2. CONFIGURACIÓN Y DATOS\nEn **CONFIGURACION** se cambian la biblioteca (DRIVE_ID), la carpeta raíz, la ruta del Excel y el nombre de la tabla.",
+        "height": 336,
+        "width": 440
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        -176
+      ],
+      "id": "0cdd31e4-1862-438e-ab52-d208b196d3d1",
+      "name": "Nota b0a2"
+    },
+    {
+      "parameters": {
+        "content": "## 3. SHAREPOINT\n- Crea una carpeta por solicitud: `NIT - RAZÓN SOCIAL - fecha hora`\n- Sube los archivos `soporte_financiero*` a esa carpeta\n- Descarga el Excel, le agrega la fila, le aplica el formato Russell Bedford y lo vuelve a subir (no usa Excel web)",
+        "height": 620,
+        "width": 1840,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        -288
+      ],
+      "id": "0317dbdc-4122-4bd5-a105-37752fd1628b",
+      "name": "Nota f39f"
+    },
+    {
+      "parameters": {
+        "content": "### ⚠️ Antes de activar\n1. Sube `INFORMACION-FORMULARIO-PT.xlsx` a la ruta de RUTA_EXCEL.\n2. La hoja debe llamarse **DATOS** y la fila 1 tener los 14 encabezados (iguales a COLUMNAS en ARMAR EXCEL RB).\n3. Si el Excel está abierto (bloqueado), el flujo espera 1 min y reintenta hasta 10 veces.",
+        "height": 200,
+        "width": 660,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -704,
+        192
+      ],
+      "id": "f746ec86-d313-486f-acf8-f63f77eb2fe9",
+      "name": "Nota 6d42"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Se envio una respuesta": {
+      "main": [
+        [
+          {
+            "node": "CONFIGURACION",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CONFIGURACION": {
+      "main": [
+        [
+          {
+            "node": "INFORMACION",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "INFORMACION": {
+      "main": [
+        [
+          {
+            "node": "CREAR CARPETA SOLICITUD",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CREAR CARPETA SOLICITUD": {
+      "main": [
+        [
+          {
+            "node": "ARMAR FILA EXCEL",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "PREPARAR ARCHIVOS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ARMAR FILA EXCEL": {
+      "main": [
+        [
+          {
+            "node": "DESCARGAR EXCEL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DESCARGAR EXCEL": {
+      "main": [
+        [
+          {
+            "node": "LEER EXCEL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LEER EXCEL": {
+      "main": [
+        [
+          {
+            "node": "ARMAR EXCEL RB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ARMAR EXCEL RB": {
+      "main": [
+        [
+          {
+            "node": "SUBIR EXCEL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SUBIR EXCEL": {
+      "main": [
+        [],
+        [
+          {
+            "node": "¿REINTENTAR?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿REINTENTAR?": {
+      "main": [
+        [
+          {
+            "node": "ESPERAR 1 MIN",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "EXCEL BLOQUEADO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ESPERAR 1 MIN": {
+      "main": [
+        [
+          {
+            "node": "DESCARGAR EXCEL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PREPARAR ARCHIVOS": {
+      "main": [
+        [
+          {
+            "node": "SUBIR ARCHIVO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timezone": "America/Bogota"
+  },
+  "tags": []
+}

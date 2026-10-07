@@ -1,0 +1,377 @@
+{
+  "name": "Flujo-financiera v2 (SharePoint)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "financiera",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -656,
+        0
+      ],
+      "id": "bfe1c405-dcf6-4d40-9ee7-131d0e9c4c6b",
+      "name": "Se envio una respuesta",
+      "webhookId": "4bd559a1-cf8b-416b-ae2c-764f1adcd55f"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===== CONFIGURACIÓN (cambiar aquí) =====\nconst CONFIG = {\n  DRIVE_ID: 'b!A_gs-UIBkkSRY-pKFZcuyNi87qYccLlJvZ-a5Y4rRAFv9vyPEXIXQZnRz1y4Vgw4',\n  RUTA_CARPETA_RAIZ: 'Documentación 2026/2. CLIENTES/PRECIOS TRANSFERFENCIA',\n  RUTA_EXCEL: 'Documentación 2026/2. CLIENTES/PRECIOS TRANSFERFENCIA/INFORMACION-FORMULARIO-PT.xlsx',\n  TABLA_EXCEL: 'DATA',\n};\n// Pasa los datos del formulario y los archivos tal cual al siguiente nodo\nconst item = $input.first();\nreturn [{ json: { ...CONFIG, body: item.json.body || {} }, binary: item.binary || {} }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -432,
+        0
+      ],
+      "id": "2aa8d32b-dfb3-4105-9670-0a125bc009b9",
+      "name": "CONFIGURACION"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0d6f6b41-56af-4700-810c-4080d7416961",
+              "name": "FECHA_ENVIO",
+              "value": "={{ $now.setZone('America/Bogota').toFormat('yyyy-LL-dd HH:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "9c4ba628-ecf3-46ef-8791-54e7813f1bd4",
+              "name": "NOMBRE_CARPETA",
+              "value": "={{ (($json.body.nit_razon_social || '') + ' - ' + ($json.body.razon_social || '') + ' - ' + $now.setZone('America/Bogota').toFormat('yyyy-LL-dd HHmm')).replace(/[\\\\/:*?\"<>|#%~&{}]/g, '').replace(/\\s+/g, ' ').trim().replace(/\\.+$/, '').slice(0, 150) }}",
+              "type": "string"
+            },
+            {
+              "id": "784aaa94-d9ad-4486-af19-058c687d634c",
+              "name": "RAZON_SOCIAL",
+              "value": "={{ $json.body.razon_social }}",
+              "type": "string"
+            },
+            {
+              "id": "976f16df-dd1c-4e9e-b892-9b12b293adab",
+              "name": "NIT",
+              "value": "={{ $json.body.nit_razon_social }}",
+              "type": "string"
+            },
+            {
+              "id": "42add7c4-66b4-4ba4-a462-c3f0085e5f88",
+              "name": "SECTOR",
+              "value": "={{ $json.body.sector }}",
+              "type": "string"
+            },
+            {
+              "id": "d6073f63-e6c2-48ae-887c-f457a3f463ff",
+              "name": "ZONA_FRANCA",
+              "value": "={{ $json.body.vinc_zona_franca }}",
+              "type": "string"
+            },
+            {
+              "id": "b6993941-837c-4815-a3cd-c681033d447e",
+              "name": "VINCULACION_EXTERIOR",
+              "value": "={{ $json.body.vinc_exterior }}",
+              "type": "string"
+            },
+            {
+              "id": "70aeb439-3289-433d-9a37-ccd458f18be6",
+              "name": "SENIOR_CARGO",
+              "value": "={{ $json.body.senior_cargo }}",
+              "type": "string"
+            },
+            {
+              "id": "deaec61d-2373-4beb-aed5-5b07b297f6a2",
+              "name": "VINCULADOS_RAZON_SOCIAL",
+              "value": "={{ $json.body.razon_social_vinculados }}",
+              "type": "string"
+            },
+            {
+              "id": "7bc7010c-0748-48a7-902b-14d16b0e7396",
+              "name": "DETALLE_SERVICIOS",
+              "value": "={{ $json.body.detalle_servicios }}",
+              "type": "string"
+            },
+            {
+              "id": "e6576b85-628f-4976-9fef-ddbf87f55f69",
+              "name": "DETALLE_PRESTAMOS",
+              "value": "={{ $json.body.detalle_prestamos }}",
+              "type": "string"
+            },
+            {
+              "id": "3740aa4a-b9f1-4f92-9186-76fbc23a6652",
+              "name": "PAISES_NO_COOPERANTES",
+              "value": "={{ $json.body.paises_no_cooperantes }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -208,
+        0
+      ],
+      "id": "587d2847-25af-463d-acc1-3fe5cef39e36",
+      "name": "INFORMACION"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.DRIVE_ID }}/root:/{{ $json.RUTA_CARPETA_RAIZ.split('/').map(s => encodeURIComponent(s)).join('/') }}:/children",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftOneDriveOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ name: $json.NOMBRE_CARPETA, folder: {}, '@microsoft.graph.conflictBehavior': 'rename' }) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        16,
+        0
+      ],
+      "id": "ba678b4a-d964-4afb-99f2-3f59d6ac0bd3",
+      "name": "CREAR CARPETA SOLICITUD",
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "KWol507krI9qoDdm",
+          "name": "Microsoft Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Toma los archivos del webhook (soporte_financiero o soporte_financiero_0, _1, ...)\n// y genera un item por archivo con el ID de la carpeta recién creada.\nconst binarios = $('CONFIGURACION').first().binary || {};\nconst carpeta = $input.first().json;\n\n// Corrige nombres que llegan con tildes mal codificadas (p. ej. \"SUBÃREA\" -> \"SUBÁREA\")\nconst arreglarNombre = (nombre) => {\n  let n = String(nombre || 'archivo.xlsx');\n  if (/[ÃÂ]/.test(n)) {\n    try { n = Buffer.from(n, 'latin1').toString('utf8'); } catch (e) {}\n  }\n  return n.replace(/[\\\\/:*?\"<>|#%]/g, '').trim();\n};\n\nconst items = [];\nfor (const key of Object.keys(binarios).sort()) {\n  if (!key.startsWith('soporte_financiero')) continue;\n  const archivo = { ...binarios[key] };\n  archivo.fileName = arreglarNombre(archivo.fileName);\n  items.push({\n    json: { carpetaId: carpeta.id, carpetaUrl: carpeta.webUrl, archivo: archivo.fileName },\n    binary: { archivo_actual: archivo },\n  });\n}\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        256,
+        112
+      ],
+      "id": "67eb4127-18bb-454e-9d88-9be7ba303dbf",
+      "name": "PREPARAR ARCHIVOS"
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('INFORMACION').first().json.DRIVE_ID }}/items/{{ $json.carpetaId }}:/{{ encodeURIComponent($binary.archivo_actual.fileName) }}:/content?@microsoft.graph.conflictBehavior=rename",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftOneDriveOAuth2Api",
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "archivo_actual",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        480,
+        112
+      ],
+      "id": "f22a9e8b-5891-4737-9c2d-6dd2ec90ede6",
+      "name": "SUBIR ARCHIVO",
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "KWol507krI9qoDdm",
+          "name": "Microsoft Drive account"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "jsCode": "// Arma la fila para la tabla del Excel en SharePoint.\n// El ORDEN debe coincidir exactamente con las columnas de la tabla.\nconst d = $('INFORMACION').first().json;\nconst carpeta = $input.first().json;\nconst binarios = $('CONFIGURACION').first().binary || {};\nconst cantidadArchivos = Object.keys(binarios).filter(k => k.startsWith('soporte_financiero')).length;\n\nconst texto = (v) => {\n  const t = String(v ?? '').trim();\n  return /^[=+\\-@]/.test(t) ? \"'\" + t : t; // evita que Excel lo interprete como fórmula\n};\nconst legible = (v) => texto(String(v ?? '').replace(/_/g, ' '));\n\nconst fila = [\n  String($execution.id),          // ID SOLICITUD\n  d.FECHA_ENVIO,                  // FECHA ENVÍO\n  texto(d.RAZON_SOCIAL),          // RAZÓN SOCIAL\n  texto(d.NIT),                   // NIT RAZÓN SOCIAL\n  legible(d.SECTOR),              // SECTOR AL QUE PERTENECE\n  texto(d.ZONA_FRANCA),           // ¿POSEE VINCULADOS EN ZONA FRANCA?\n  texto(d.VINCULACION_EXTERIOR),  // ¿POSEE VINCULADOS EN EL EXTERIOR?\n  legible(d.SENIOR_CARGO),        // SENIOR A CARGO\n  texto(d.VINCULADOS_RAZON_SOCIAL), // RAZÓN SOCIAL DE LOS VINCULADOS\n  texto(d.DETALLE_SERVICIOS),     // VENTA DE BIENES O PRESTACIÓN DE SERVICIOS\n  texto(d.DETALLE_PRESTAMOS),     // SALDOS O MOVIMIENTOS DE PRÉSTAMOS\n  texto(d.PAISES_NO_COOPERANTES), // OPERACIONES EN JURISDICCIONES NO COOPERANTES\n  cantidadArchivos,               // CANTIDAD DE ARCHIVOS\n  carpeta.webUrl || '',           // CARPETA SHAREPOINT\n];\nreturn [{ json: { fila } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        256,
+        -112
+      ],
+      "id": "38475f8d-5709-4d85-9a95-fdf23ef74f12",
+      "name": "ARMAR FILA EXCEL"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('INFORMACION').first().json.DRIVE_ID }}/root:/{{ $('INFORMACION').first().json.RUTA_EXCEL.split('/').map(s => encodeURIComponent(s)).join('/') }}:/workbook/tables/{{ encodeURIComponent($('INFORMACION').first().json.TABLA_EXCEL) }}/rows",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftOneDriveOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ values: [ $json.fila ] }) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        480,
+        -112
+      ],
+      "id": "d564b742-12c0-43c5-9983-aed710ec7593",
+      "name": "AGREGAR FILA EXCEL SHAREPOINT",
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "KWol507krI9qoDdm",
+          "name": "Microsoft Drive account"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000
+    },
+    {
+      "parameters": {
+        "content": "## 1. RESPUESTA DEL FORMULARIO\nWebhook `/financiera` (lo llama el backend del formulario web).",
+        "height": 336,
+        "width": 400
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -704,
+        -176
+      ],
+      "id": "34a7e6db-cb12-4414-807a-8d601fc8747b",
+      "name": "Nota 7688"
+    },
+    {
+      "parameters": {
+        "content": "## 2. CONFIGURACIÓN Y DATOS\nEn **CONFIGURACION** se cambian la biblioteca (DRIVE_ID), la carpeta raíz, la ruta del Excel y el nombre de la tabla.",
+        "height": 336,
+        "width": 440
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        -176
+      ],
+      "id": "eda16f40-5c87-4d42-a2b6-76abf9dfc2b6",
+      "name": "Nota 6189"
+    },
+    {
+      "parameters": {
+        "content": "## 3. SHAREPOINT\n- Crea una carpeta por solicitud: `NIT - RAZÓN SOCIAL - fecha hora`\n- Sube los archivos `soporte_financiero*` a esa carpeta\n- Agrega la fila a la tabla **DATA** del Excel (14 columnas, en orden)",
+        "height": 560,
+        "width": 720,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        -288
+      ],
+      "id": "857703c8-7709-4bd9-aa6f-50584011c618",
+      "name": "Nota 3229"
+    },
+    {
+      "parameters": {
+        "content": "### ⚠️ Antes de activar\n1. Sube `INFORMACION-FORMULARIO-PT.xlsx` a la ruta de RUTA_EXCEL.\n2. La tabla debe llamarse **DATA** y tener las 14 columnas en el mismo orden que el nodo ARMAR FILA EXCEL.\n3. La credencial *Microsoft Drive account* debe tener acceso al sitio de SharePoint.",
+        "height": 200,
+        "width": 660,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -704,
+        192
+      ],
+      "id": "352b0bf9-08cd-48e5-81a2-714aa1d87b11",
+      "name": "Nota 39f6"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Se envio una respuesta": {
+      "main": [
+        [
+          {
+            "node": "CONFIGURACION",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CONFIGURACION": {
+      "main": [
+        [
+          {
+            "node": "INFORMACION",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "INFORMACION": {
+      "main": [
+        [
+          {
+            "node": "CREAR CARPETA SOLICITUD",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CREAR CARPETA SOLICITUD": {
+      "main": [
+        [
+          {
+            "node": "ARMAR FILA EXCEL",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "PREPARAR ARCHIVOS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ARMAR FILA EXCEL": {
+      "main": [
+        [
+          {
+            "node": "AGREGAR FILA EXCEL SHAREPOINT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PREPARAR ARCHIVOS": {
+      "main": [
+        [
+          {
+            "node": "SUBIR ARCHIVO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timezone": "America/Bogota"
+  },
+  "tags": []
+}

@@ -1,6 +1,6 @@
-# Formulario de Precios de Transferencia
+# Base de datos Russell
 
-Formulario web de Russell Bedford para recibir la información financiera y los soportes de Precios de Transferencia. Los datos se reenvían a un webhook de n8n.
+Formulario web de Russell Bedford para recibir la información de las entidades, sus operaciones con vinculados y el acumulado por tercero. Los datos se reenvían a un webhook de n8n.
 
 ```
 frontend/   React (JSX) + CSS · Vite · servido por nginx

@@ -13,7 +13,7 @@ export default function App() {
           <div className="intro">
             <p className="intro__eyebrow">Periodo fiscal 2026</p>
             <h1 className="intro__title">
-              <strong>Precios</strong> de Transferencia
+              <strong>Base de datos</strong> Russell
             </h1>
             <p className="intro__text">
               Diligencie la información de la entidad informante y sus operaciones con vinculados.
