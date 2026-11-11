@@ -52,6 +52,7 @@ const SENIOR_NAMES = {
   VALENTINA_RODRIGUEZ_RAMIREZ: 'Valentina Rodríguez Ramírez',
   WILBER_ENRIQUE_PEREZ_TORRES: 'Wilber Enrique Pérez Torres',
   WILMAR_TUBERQUIA_AVENDANO: 'Wilmar Tuberquia Avendaño',
+  YULI_ALEJANDRA_VILLA_HIGUITA: 'Yuli Alejandra Villa Higuita',
 };
 
 export const SENIORS = Object.entries(SENIOR_NAMES).map(([value, label]) => ({ value, label }));
